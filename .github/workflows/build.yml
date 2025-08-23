@@ -1,88 +1,59 @@
-name: Build Cross-Platform Libraries
+name: Build Gifsicle Dynamic Libraries
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup MSYS2
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: MINGW64
-        install: >-
-          mingw-w64-x86_64-gcc
-          mingw-w64-x86_64-autotools
-          mingw-w64-x86_64-libtool
-          autoconf
-          automake
-          make
-    
-    - name: Build Windows DLL
-      shell: msys2 {0}
-      run: |
-        autoreconf -fiv
-        ./configure
-        make
-        
-    - name: Upload Windows artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: libgifsicle-windows
-        path: |
-          src/.libs/*.dll
-          src/.libs/libgifsicle.dll.a
-
   build-linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential autotools-dev autoconf libtool
-    
-    - name: Build Linux SO
-      run: |
-        autoreconf -fiv
-        ./configure
-        make
-        
-    - name: Upload Linux artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: libgifsicle-linux
-        path: |
-          src/.libs/*.so*
-          src/.libs/libgifsicle.a
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-  build-macos:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    
     - name: Install dependencies
-      run: |
-        brew install autoconf automake libtool
-    
-    - name: Build macOS dylib
-      run: |
-        autoreconf -fiv
-        ./configure
-        make
-        
-    - name: Upload macOS artifacts
+      run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool
+
+    - name: Run bootstrap.sh
+      run: ./bootstrap.sh
+
+    - name: Configure
+      run: ./configure --prefix=/usr
+
+    - name: Build
+      run: make
+
+    - name: List build artifacts
+      run: ls -l src/.libs
+
+    - name: Upload Linux Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: libgifsicle-macos
-        path: |
-          src/.libs/*.dylib
-          src/.libs/libgifsicle.a
+        name: libgifsicle-so
+        path: src/.libs/libgifsicle.so
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x64
+
+    - name: Build
+      shell: msys2 {0}
+      run: make -f Makefile.mingw
+
+    - name: List build artifacts
+      run: ls -l src
+
+    - name: Upload Windows Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: libgifsicle-dll
+        path: src/libgifsicle.dll
