@@ -78,6 +78,7 @@ jobs:
       run: copy src\win32cfg.h config.h
 
     - name: Build DLL
+      shell: cmd
       run: |
         cd src
         gcc -shared -o libgifsicle.dll -DHAVE_CONFIG_H -I.. -I../include ^
