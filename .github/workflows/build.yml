@@ -16,8 +16,14 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool
 
-    - name: Run bootstrap.sh
-      run: ./bootstrap.sh
+    - name: Clean autotools files
+      run: |
+        rm -f configure Makefile.in aclocal.m4 src/Makefile.in
+        rm -rf autom4te.cache
+        rm -f libtool ltmain.sh config.guess config.sub install-sh missing depcomp
+
+    - name: Regenerate autotools files
+      run: autoreconf -fiv
 
     - name: Configure
       run: ./configure --prefix=/usr
