@@ -13,7 +13,7 @@
 /* Assume we don't have inline by default */
 # define inline
 #endif
-#include "lcdfgif/gif.h"
+#include "../include/lcdfgif/gif.h"
 #include <stdarg.h>
 #include <assert.h>
 #include <string.h>
