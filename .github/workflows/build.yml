@@ -38,7 +38,9 @@ jobs:
       run: |
         cd src
         gcc -shared -fPIC -o libgifsicle.so -DHAVE_CONFIG_H -I. -I.. -I../include \
-          *.c -lm
+          libgifsicle.c clp.c fmalloc.c giffunc.c gifread.c gifunopt.c \
+          gifwrite.c merge.c optimize.c quantize.c support.c xform.c \
+          gifsicle.c kcolor.c -lm
 
     - name: Check build artifacts
       run: |
