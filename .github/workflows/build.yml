@@ -16,14 +16,27 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool
 
+    - name: Debug environment
+      run: |
+        pwd
+        ls -la
+        ls -la include/
+        ls -la include/lcdfgif/
+
     - name: Run bootstrap.sh
       run: ./bootstrap.sh
 
     - name: Configure
       run: ./configure --prefix=/usr
 
+    - name: Debug Makefile
+      run: |
+        cd src
+        grep "AM_CPPFLAGS" Makefile
+        grep "top_srcdir" Makefile
+
     - name: Build
-      run: make CPPFLAGS="-I$(pwd)/include"
+      run: make
 
     - name: List build artifacts
       run: ls -l src/.libs
@@ -48,10 +61,16 @@ jobs:
     - name: Copy config file
       run: copy src\win32cfg.h config.h
 
+    - name: Debug Windows environment
+      run: |
+        dir
+        dir include
+        dir include\lcdfgif
+
     - name: Build DLL
       run: |
         cd src
-        gcc -shared -o libgifsicle.dll -DHAVE_CONFIG_H -I.. -I..\include ^
+        gcc -shared -o libgifsicle.dll -DHAVE_CONFIG_H -I.. -I../include ^
           clp.c fmalloc.c giffunc.c gifread.c gifunopt.c gifwrite.c ^
           merge.c optimize.c quantize.c support.c xform.c gifsicle.c libgifsicle.c
 
