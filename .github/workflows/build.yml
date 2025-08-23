@@ -26,10 +26,25 @@ jobs:
       run: autoreconf -fiv
 
     - name: Configure
-      run: ./configure --prefix=/usr
+      run: ./configure --prefix=/usr --disable-shared --enable-static
 
-    - name: Build
-      run: make
+    - name: Clean previous build
+      run: make clean || true
+
+    - name: Build with verbose output
+      run: make V=1
+
+    - name: Build shared library manually
+      run: |
+        cd src
+        gcc -shared -fPIC -o libgifsicle.so -DHAVE_CONFIG_H -I. -I.. -I../include \
+          *.c -lm
+
+    - name: Check build artifacts
+      run: |
+        ls -la src/
+        ls -la src/.libs/ || echo "No .libs directory found"
+        ls -la src/*.so || echo "No .so files found"
 
     - name: List build artifacts
       run: ls -l src/.libs
@@ -38,7 +53,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: libgifsicle-so
-        path: src/.libs/libgifsicle.so
+        path: src/libgifsicle.so
 
   build-windows:
     runs-on: windows-latest
