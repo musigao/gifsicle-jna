@@ -23,7 +23,7 @@ jobs:
       run: ./configure --prefix=/usr
 
     - name: Build
-      run: make
+      run: make CPPFLAGS="-I$(pwd)/include"
 
     - name: List build artifacts
       run: ls -l src/.libs
@@ -45,12 +45,18 @@ jobs:
       with:
         platform: x64
 
-    - name: Build
-      shell: msys2 {0}
-      run: make -f Makefile.mingw
+    - name: Copy config file
+      run: copy src\win32cfg.h config.h
+
+    - name: Build DLL
+      run: |
+        cd src
+        gcc -shared -o libgifsicle.dll -DHAVE_CONFIG_H -I.. -I..\include ^
+          clp.c fmalloc.c giffunc.c gifread.c gifunopt.c gifwrite.c ^
+          merge.c optimize.c quantize.c support.c xform.c gifsicle.c libgifsicle.c
 
     - name: List build artifacts
-      run: ls -l src
+      run: dir src
 
     - name: Upload Windows Artifact
       uses: actions/upload-artifact@v4
