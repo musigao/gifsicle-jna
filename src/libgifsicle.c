@@ -1,6 +1,6 @@
 #include "libgifsicle.h"
 #include "gifsicle.h"
-#include "../include/lcdfgif/gif.h"
+#include "lcdfgif/gif.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

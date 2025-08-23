@@ -13,7 +13,7 @@
 #endif
 
 #include "../include/lcdfgif/gifx.h"
-#include "../include/lcdf/clp.h"
+#include "lcdf/clp.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
