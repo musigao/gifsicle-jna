@@ -67,6 +67,12 @@ jobs:
       uses: egor-tensin/setup-mingw@v2
       with:
         platform: x64
+      continue-on-error: true
+
+    - name: Verify MinGW installation
+      run: |
+        gcc --version
+        where gcc
 
     - name: Copy config file
       run: copy src\win32cfg.h config.h
@@ -75,8 +81,9 @@ jobs:
       run: |
         cd src
         gcc -shared -o libgifsicle.dll -DHAVE_CONFIG_H -I.. -I../include ^
-          clp.c fmalloc.c giffunc.c gifread.c gifunopt.c gifwrite.c ^
-          merge.c optimize.c quantize.c support.c xform.c gifsicle.c libgifsicle.c
+          libgifsicle.c clp.c fmalloc.c giffunc.c gifread.c gifunopt.c ^
+          gifwrite.c merge.c optimize.c quantize.c support.c xform.c ^
+          gifsicle.c kcolor.c
 
     - name: List build artifacts
       run: dir src
