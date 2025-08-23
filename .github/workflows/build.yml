@@ -16,24 +16,11 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool
 
-    - name: Debug environment
-      run: |
-        pwd
-        ls -la
-        ls -la include/
-        ls -la include/lcdfgif/
-
     - name: Run bootstrap.sh
       run: ./bootstrap.sh
 
     - name: Configure
       run: ./configure --prefix=/usr
-
-    - name: Debug Makefile
-      run: |
-        cd src
-        grep "AM_CPPFLAGS" Makefile
-        grep "top_srcdir" Makefile
 
     - name: Build
       run: make
@@ -60,12 +47,6 @@ jobs:
 
     - name: Copy config file
       run: copy src\win32cfg.h config.h
-
-    - name: Debug Windows environment
-      run: |
-        dir
-        dir include
-        dir include\lcdfgif
 
     - name: Build DLL
       run: |
