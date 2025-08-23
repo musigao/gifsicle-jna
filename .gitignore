@@ -27,3 +27,9 @@ stamp-h*
 ungifsicle-*.rpm
 ungifsicle-*.tar.gz
 compile
+
+# Build artifacts
+src/.libs/
+src/libgifsicle.so
+jna_demo/target/
+.vscode/
