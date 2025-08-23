@@ -11,6 +11,7 @@
 #define LCDF_GIF_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <lcdf/inttypes.h>
 #ifdef __cplusplus
 extern "C" {
