@@ -10,7 +10,7 @@
 #if HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <lcdfgif/gif.h>
+#include "lcdfgif/gif.h"
 #include <string.h>
 #include <stdarg.h>
 #ifdef __cplusplus

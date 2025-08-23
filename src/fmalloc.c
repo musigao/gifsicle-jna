@@ -3,7 +3,7 @@
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <lcdfgif/gif.h>
+#include "lcdfgif/gif.h"
 
 #ifdef __cplusplus
 extern "C" {

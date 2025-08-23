@@ -12,8 +12,8 @@
 #error "You can't compile gifview without X."
 #endif
 
-#include <lcdfgif/gifx.h>
-#include <lcdf/clp.h>
+#include "lcdfgif/gifx.h"
+#include "lcdf/clp.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>

@@ -8,8 +8,8 @@
    is no warranty, express or implied. */
 
 #include <config.h>
-#include <lcdfgif/gif.h>
-#include <lcdf/clp.h>
+#include "lcdfgif/gif.h"
+#include "lcdf/clp.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>

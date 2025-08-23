@@ -10,7 +10,7 @@
 #if HAVE_CONFIG_H
 # include <config.h>
 #endif
-#include <lcdfgif/gifx.h>
+#include "lcdfgif/gifx.h"
 #include <X11/Xutil.h>
 #include <assert.h>
 #include <string.h>
