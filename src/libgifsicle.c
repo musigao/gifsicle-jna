@@ -13,7 +13,11 @@
 
 // Forward declarations of functions from gifsicle.c
 int gifsicle_main(int argc, char** argv);
+void gifsicle_init(void);
 void gifsicle_cleanup(void);
+
+// Global initialization flag
+static int gifsicle_initialized = 0;
 
 static int run_gifsicle(int argc, char** argv) {
     // The original main function in gifsicle.c calls exit().
@@ -22,7 +26,7 @@ static int run_gifsicle(int argc, char** argv) {
     // easily capture the return code without more complex changes.
     // We'll assume success if it doesn't crash.
     gifsicle_main(argc, argv);
-    gifsicle_cleanup();
+    // Don't call gifsicle_cleanup() here - let user control cleanup
     return 0;
 }
 

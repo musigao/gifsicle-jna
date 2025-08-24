@@ -10,6 +10,7 @@
 
 #include <config.h>
 #include "gifsicle.h"
+#include "libgifsicle.h"
 #include "kcolor.h"
 #include <string.h>
 #include <stdio.h>
@@ -1459,7 +1460,7 @@ error:
 int gifsicle_main(int, char **);
 void gifsicle_cleanup(void);
 
-void gifsicle_init(void) {
+GIFSICLE_API void gifsicle_init(void) {
   // No-op for now, but good practice to have.
 }
 
@@ -2244,7 +2245,7 @@ particular purpose.\n");
   return (error_count ? EXIT_ERR : EXIT_OK);
 }
 
-void gifsicle_cleanup(void) {
+GIFSICLE_API void gifsicle_cleanup(void) {
     if (frames) {
         blank_frameset(frames, 0, 0, 1);
         frames = NULL;

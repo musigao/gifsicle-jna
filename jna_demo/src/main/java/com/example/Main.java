@@ -31,38 +31,42 @@ public class Main {
             System.out.println("Initializing Gifsicle...");
             Gifsicle.INSTANCE.gifsicle_init();
 
-            String optimizedFile = "optimized.gif";
-            System.out.println("Optimizing GIF to " + optimizedFile);
-            int optimizeResult =
-                    Gifsicle.INSTANCE.gifsicle_optimize(inputFile.getAbsolutePath(), optimizedFile, 80);
-            if (optimizeResult == 0) {
-                System.out.println("Optimization successful.");
-            } else {
-                System.err.println("Optimization failed.");
+            try {
+                String optimizedFile = "optimized.gif";
+                System.out.println("Optimizing GIF to " + optimizedFile);
+                int optimizeResult =
+                        Gifsicle.INSTANCE.gifsicle_optimize(inputFile.getAbsolutePath(), optimizedFile, 80);
+                if (optimizeResult == 0) {
+                    System.out.println("Optimization successful.");
+                } else {
+                    System.err.println("Optimization failed.");
+                }
+
+                String resizedFile = "resized.gif";
+                System.out.println("Resizing GIF to " + resizedFile);
+                int resizeResult = Gifsicle.INSTANCE.gifsicle_resize(optimizedFile, resizedFile, 100, 100);
+                if (resizeResult == 0) {
+                    System.out.println("Resize successful.");
+                } else {
+                    System.err.println("Resize failed.");
+                }
+
+                String croppedFile = "cropped.gif";
+                System.out.println("Cropping GIF to " + croppedFile);
+                int cropResult = Gifsicle.INSTANCE.gifsicle_crop(resizedFile, croppedFile, "10,10+50x50");
+                if (cropResult == 0) {
+                    System.out.println("Crop successful.");
+                } else {
+                    System.err.println("Crop failed.");
+                }
+
+                System.out.println("\nDemo finished. Check the generated files: " + optimizedFile + ", " + resizedFile + ", " + croppedFile);
+                
+            } finally {
+                // Ensure cleanup is always called
+                System.out.println("Cleaning up Gifsicle...");
+                Gifsicle.INSTANCE.gifsicle_cleanup();
             }
-
-            String resizedFile = "resized.gif";
-            System.out.println("Resizing GIF to " + resizedFile);
-            int resizeResult = Gifsicle.INSTANCE.gifsicle_resize(optimizedFile, resizedFile, 100, 100);
-            if (resizeResult == 0) {
-                System.out.println("Resize successful.");
-            } else {
-                System.err.println("Resize failed.");
-            }
-
-            String croppedFile = "cropped.gif";
-            System.out.println("Cropping GIF to " + croppedFile);
-            int cropResult = Gifsicle.INSTANCE.gifsicle_crop(resizedFile, croppedFile, "10,10+50x50");
-            if (cropResult == 0) {
-                System.out.println("Crop successful.");
-            } else {
-                System.err.println("Crop failed.");
-            }
-
-            System.out.println("Cleaning up Gifsicle...");
-            Gifsicle.INSTANCE.gifsicle_cleanup();
-
-            System.out.println("\nDemo finished. Check the generated files: " + optimizedFile + ", " + resizedFile + ", " + croppedFile);
 
         } catch (Exception e) {
             e.printStackTrace();
