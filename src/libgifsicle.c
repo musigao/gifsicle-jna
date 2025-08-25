@@ -25,12 +25,15 @@ static int run_gifsicle(int argc, char** argv) {
     // to make the core logic not call exit(). For now, we can't
     // easily capture the return code without more complex changes.
     // We'll assume success if it doesn't crash.
+    
     gifsicle_main(argc, argv);
+    
     // Don't call gifsicle_cleanup() here - let user control cleanup
     return 0;
 }
 
 GIFSICLE_API int gifsicle_crop(const char* input_path, const char* output_path, const char* crop_spec) {
+    // 裁剪命令: gifsicle --crop ... -o targetFile sourceFile
     char* argv[] = {
         "gifsicle",
         "--crop",
@@ -46,39 +49,30 @@ GIFSICLE_API int gifsicle_crop(const char* input_path, const char* output_path, 
 }
 
 GIFSICLE_API int gifsicle_resize(const char* input_path, const char* output_path, int width, int height) {
+    // 缩放命令: gifsicle --resize-fit widthxheight -o targetFile sourceFile
     char resize_str[100];
     snprintf(resize_str, sizeof(resize_str), "%dx%d", width, height);
 
     char* argv[] = {
         "gifsicle",
-        "--resize",
+        "--resize-fit",
         resize_str,
-        "--resize-method",
-        "lanczos3",
         "-o",
         (char*)output_path,
         (char*)input_path,
         NULL
     };
-    int argc = 8;
+    int argc = 6;
 
     return run_gifsicle(argc, argv);
 }
 
 GIFSICLE_API int gifsicle_optimize(const char* input_path, const char* output_path, int level) {
-    char opt_level[5];
+    // 压缩命令: gifsicle -O2 --lossy=x -o targetFile sourceFile
     char lossy_level[15];
     
-    // 强制使用最高优化等级
-    snprintf(opt_level, sizeof(opt_level), "-O3");
-    
-    // 扩展lossy等级支持，支持更高的压缩率
+    // 根据level设置lossy值
     if (level >= 1 && level <= 200) {
-        // 直接使用传入的level作为lossy值
-        // level=1 → --lossy=1 (最轻压缩)
-        // level=50 → --lossy=50 (中等压缩)
-        // level=120 → --lossy=120 (高压缩)
-        // level=200 → --lossy=200 (极限压缩)
         snprintf(lossy_level, sizeof(lossy_level), "--lossy=%d", level);
     } else if (level > 200) {
         // 超过200的话，限制在200以内避免过度压缩
@@ -90,19 +84,14 @@ GIFSICLE_API int gifsicle_optimize(const char* input_path, const char* output_pa
 
     char* argv[] = {
         "gifsicle",
-        opt_level,              // -O3 最高优化
+        "-O2",                  // 使用O2优化等级，比O3快
         lossy_level,            // --lossy=XX 允许质量损失
-        "--colors",
-        "128",                  // 减少到128色以获得更好压缩
-        "--dither",             // 启用抖动保持视觉质量
-        "--optimize=3",         // 深度帧优化
-        "--careful",            // 仔细处理
         "-o",
         (char*)output_path,
         (char*)input_path,
         NULL
     };
-    int argc = 11;
+    int argc = 6;  // 修正参数数量
 
     return run_gifsicle(argc, argv);
 }
